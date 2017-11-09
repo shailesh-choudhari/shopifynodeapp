@@ -35,7 +35,12 @@ app.get('/shopifyapp', (req, res) => {
 });
 
 app.get('/shopifyapp/callback', (req, res) => {
-    const { shop, hmac, code, state } = req.query;
+    const {
+        shop,
+        hmac,
+        code,
+        state
+    } = req.query;
     const stateCookie = cookie.parse(req.headers.cookie).state;
 
     if (state !== stateCookie) {
@@ -65,7 +70,9 @@ app.get('/shopifyapp/callback', (req, res) => {
             code,
         };
 
-        request.post(accessTokenRequestUrl, { json: accessTokenPayload })
+        request.post(accessTokenRequestUrl, {
+                json: accessTokenPayload
+            })
             .then((accessTokenResponse) => {
                 const accessToken = accessTokenResponse.access_token;
                 // DONE: Use access token to make API call to 'shop' endpoint
@@ -74,7 +81,9 @@ app.get('/shopifyapp/callback', (req, res) => {
                     'X-Shopify-Access-Token': accessToken,
                 };
 
-                request.get(shopRequestUrl, { headers: shopRequestHeaders })
+                request.get(shopRequestUrl, {
+                        headers: shopRequestHeaders
+                    })
                     .then((shopResponse) => {
                         res.status(200).end(shopResponse);
                     })
